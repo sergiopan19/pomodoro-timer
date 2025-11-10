@@ -8,6 +8,8 @@
     column-gap: 20px;
     background-color: var(--color);
     border-radius: 50px;
+
+    transition: background-color 0.3s ease;
 }
 
 .tabContainer {
@@ -69,7 +71,14 @@
     align-items: center;
     border-radius: 25px;
     font-weight: bold;
-    background-color: var(--color)
+    background-color: var(--color);
+
+    transition: background-color 0.3s ease;
+}
+
+.timerButton:hover {
+    border: white solid 1px;
+    transition: border 0.3s ease;
 }
 
 .controlsContainer {
