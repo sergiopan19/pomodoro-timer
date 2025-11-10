@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://sergiopan19.github.io/pomodoro-timer",
+  "homepage": "https://sergiopan19.github.io/pomodoro-timer/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
