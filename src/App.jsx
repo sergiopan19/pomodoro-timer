@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback} from 'react'
 import './styles/App.css'
 import timer from './styles/timer.module.css'
 
@@ -27,7 +27,7 @@ function Timer({timerTypes, timerType, setTimerType}) {
   const [time, setTime] = useState(timerTypes[timerType].time * 60)
   const [isRunning, setIsRunning] = useState(false)
   const [alarmAudio, setAlarmAudio] = useState(null)
-
+  
   //Reset timer when timer type changes
   useEffect(() => {
     setTime(timerTypes[timerType].time * 60)
@@ -51,7 +51,7 @@ function Timer({timerTypes, timerType, setTimerType}) {
   }, [isRunning, time])
 
   //Handles basic timer controls
-  const handleStartStop = () => {
+  const handleStartStop = useCallback(() => {
     stopAlarm()
     setTime((prevTime) => {
       if (prevTime === 0) {
@@ -60,7 +60,7 @@ function Timer({timerTypes, timerType, setTimerType}) {
       return prevTime
     })
     setIsRunning(!isRunning)
-  }
+  }, [alarmAudio, timerTypes, timerType, isRunning])
   const handleReset = () => {
     stopAlarm()
     setTime(timerTypes[timerType].time * 60)
@@ -83,6 +83,18 @@ function Timer({timerTypes, timerType, setTimerType}) {
     }
   }
 
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      if (e.key === ' ') {
+        e.preventDefault()
+        handleStartStop()
+      }
+    }
+
+    document.addEventListener('keydown', handleGlobalKeyDown)
+    return () => document.removeEventListener('keydown', handleGlobalKeyDown)
+  }, [handleStartStop])
+
   return (
     <div className={timer.container} style={{'--color': timerTypes[timerType].color}}>
       <TabPanel 
@@ -95,6 +107,7 @@ function Timer({timerTypes, timerType, setTimerType}) {
         time={time}
         onTimeChange={setTime}
         isRunning={isRunning}
+        onStartStop={handleStartStop}
       />
       <IncrementPanel 
         onIncrement={handleIncrement} 
@@ -156,9 +169,10 @@ function TabPanel({timerTypes, timerType, setTimerType, buttonColor}) {
 }
 
 //Handles time editing and time display
-function Clock({time, onTimeChange, isRunning}) {
+function Clock({time, onTimeChange, isRunning, onStartStop}) {
   const [isEditing, setIsEditing] = useState(false)
   const [digits, setDigits] = useState('0000')
+  const inputRef = useRef(null)
 
   const minutes = Math.floor(time/ 60)
   const seconds = time % 60
@@ -171,6 +185,13 @@ function Clock({time, onTimeChange, isRunning}) {
       setDigits(currentDigits)
     }
   }
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      const length = inputRef.current.value.length
+      inputRef.current.setSelectionRange(length, length)
+    }
+  }, [isEditing, digits])
 
   const formatDisplay = (digitString) => {
     const mins = digitString.slice(0, 2)
@@ -187,8 +208,13 @@ function Clock({time, onTimeChange, isRunning}) {
       setDigits(prev => ('0' + prev.slice(0, -1)))
     } else if (e.key === 'Enter') {
       handleSubmit(e)
+    } else if (e.key === ' ') {
+      e.preventDefault()
+      handleSubmit(e) // Submit current edit
     } else if (e.key === 'Escape') {
       setIsEditing(false)
+    } else if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+      e.preventDefault() // Block arrow keys
     }
   }
 
@@ -204,10 +230,13 @@ function Clock({time, onTimeChange, isRunning}) {
     return (
       <form onSubmit={handleSubmit}>
         <input
+          ref={inputRef}
           className={timer.clockContainer}
           type="text"
           value={formatDisplay(digits)}
           onKeyDown={handleKeyDown}
+          onMouseDown={(e) => e.preventDefault()} // Prevent mouse selection
+          onSelect={(e) => e.preventDefault()} // Prevent text selection
           onBlur={handleSubmit}
           autoFocus
           readOnly
