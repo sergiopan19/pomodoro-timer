@@ -69,7 +69,7 @@ function Timer({timerTypes, timerType, setTimerType}) {
   const handleIncrement = (seconds) => setTime((prevTime) => prevTime + seconds)
 
   const playAlarm = () => {
-    const audio = new Audio('src/assets/alarm-clock.mp3')
+    const audio = new Audio('./assets/alarm-clock.mp3')
     audio.loop = true
     audio.play().catch((error) => console.log('Audio failed to play: ', error))
     setAlarmAudio(audio)
@@ -295,13 +295,13 @@ function ControlPanel ({isRunning, onStartStop, onReset, buttonColor}) {
     { 
       type: 'startStop', 
       onClick: onStartStop, 
-      icon: isRunning ? 'src/assets/pause.svg' : 'src/assets/play.svg',
+      icon: isRunning ? './assets/pause.svg' : './assets/play.svg',
       alt: isRunning ? 'Pause' : 'Play'
     },
     { 
       type: 'reset', 
       onClick: onReset, 
-      icon: 'src/assets/reset.svg',
+      icon: './assets/reset.svg',
       alt: 'Reset'
     }
   ]
