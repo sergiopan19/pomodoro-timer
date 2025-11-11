@@ -71,6 +71,7 @@
     align-items: center;
     border-radius: 25px;
     font-weight: bold;
+    color: white;
     background-color: var(--color);
 
     transition: background-color 0.3s ease;
@@ -87,4 +88,65 @@
     align-items: center;
     gap: 35px;
     margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        border-radius: 25px;
+    }
+    .tabContainer {
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .clockContainer {
+        font-size: 64px;
+        width: 200px;
+    }
+
+    .incrementContainer {
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .controlsContainer {
+        gap: 25px;
+    }
+
+    .timerButton {
+        padding: 10px 15px;
+        font-size: 14px;
+        height: 40px;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .tabContainer {
+        gap: 5px;
+        margin-top: 10px;
+    }
+
+    .timerButton {
+        padding: 6px 6px;
+        font-size: 10px;
+        height: 30px;
+    }
+
+    .clockContainer {
+        font-size: 48px;
+        width: 150px;
+    }
+
+    .incrementContainer {
+        gap: 10px;
+        padding: 0;
+        height: auto;
+        margin: 0;
+    }
+
+    .controlsContainer {
+        gap: 20px;
+        margin: 10px;
+    }
 }
