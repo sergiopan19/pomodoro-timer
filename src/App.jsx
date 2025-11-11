@@ -247,7 +247,6 @@ function Clock({time, onTimeChange, isRunning, onStartStop}) {
           onSelect={(e) => e.preventDefault()}    // Prevent text selection
           onBlur={handleSubmit}
           autoFocus
-          readOnly
         />
       </form>
     )
