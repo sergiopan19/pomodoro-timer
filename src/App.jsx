@@ -186,6 +186,12 @@ function Clock({time, onTimeChange, isRunning, onStartStop}) {
     }
   }
 
+  
+  const handleTouch = (e) => {
+    e.preventDefault()
+    handleClick()
+  }
+
   useEffect(() => {
     if (isEditing && inputRef.current) {
       const length = inputRef.current.value.length
@@ -246,7 +252,11 @@ function Clock({time, onTimeChange, isRunning, onStartStop}) {
   }
   
   return (
-    <h1 className={timer.clockContainer} onClick={handleClick} style={{ cursor: isRunning ? 'default' : 'pointer' }}>
+    <h1 
+      className={timer.clockContainer} 
+      onClick={handleClick} 
+      onTouchStart={handleTouch}
+      style={{ cursor: isRunning ? 'default' : 'pointer' }}>
       {minutes}:{seconds.toString().padStart(2, '0')}
     </h1>
   )
